@@ -7,6 +7,7 @@ function run(p, q) {
   const pp = () => D.pop();
   const CK = (po, pu) => (D.length < po ? 2 : D.length - po + pu > 256 ? 3 : 0);
   const MA = a => a < 0 || a >= 256;
+  const BIN = { 16: (a, b) => (a + b) | 0, 17: (a, b) => (a - b) | 0, 18: (a, b) => Math.imul(a, b), 24: (a, b) => a & b, 25: (a, b) => a | b, 26: (a, b) => a ^ b, 28: (a, b) => (a << (b & 31)) | 0, 29: (a, b) => a >> (b & 31), 30: (a, b) => (a >>> (b & 31)) | 0, 32: (a, b) => (a === b ? 1 : 0), 33: (a, b) => (a < b ? 1 : 0), 34: (a, b) => ((a >>> 0) < (b >>> 0) ? 1 : 0) };
   for (;;) {
     if (st++ >= 1000000) return E(10);
     if (pc < 0 || pc >= n) return E(9);
@@ -25,28 +26,22 @@ function run(p, q) {
       case 5: { if ((c = CK(2, 2))) return E(c); const b = pp(), a = pp(); ps(b); ps(a); break; }
       case 6: { if ((c = CK(2, 3))) return E(c); const b = pp(), a = pp(); ps(a); ps(b); ps(a); break; }
       case 7: { if ((c = CK(3, 3))) return E(c); const z = pp(), y = pp(), x = pp(); ps(y); ps(z); ps(x); break; }
-      case 16: case 17: case 18: case 19: case 20: case 21: case 22:
-      case 24: case 25: case 26: case 28: case 29: case 30:
-      case 32: case 33: case 34: {
+      case 16: case 17: case 18: case 24: case 25: case 26:
+      case 28: case 29: case 30: case 32: case 33: case 34: {
         if ((c = CK(2, 1))) return E(c);
         const b = pp(), a = pp();
+        ps(BIN[op](a, b));
+        break;
+      }
+      case 19: case 20: case 21: case 22: {
+        if ((c = CK(2, 1))) return E(c);
+        const b = pp(), a = pp();
+        if (b === 0) return E(4);
         let r;
-        if (op === 16) r = (a + b) | 0;
-        else if (op === 17) r = (a - b) | 0;
-        else if (op === 18) r = Math.imul(a, b);
-        else if (op === 19) { if (b === 0) return E(4); r = a === -2147483648 && b === -1 ? a : Math.trunc(a / b) | 0; }
-        else if (op === 20) { if (b === 0) return E(4); r = b === -1 ? 0 : (a % b) | 0; }
-        else if (op === 21) { if (b === 0) return E(4); r = Math.floor((a >>> 0) / (b >>> 0)) | 0; }
-        else if (op === 22) { if (b === 0) return E(4); r = ((a >>> 0) % (b >>> 0)) | 0; }
-        else if (op === 24) r = a & b;
-        else if (op === 25) r = a | b;
-        else if (op === 26) r = a ^ b;
-        else if (op === 28) r = (a << (b & 31)) | 0;
-        else if (op === 29) r = a >> (b & 31);
-        else if (op === 30) r = (a >>> (b & 31)) | 0;
-        else if (op === 32) r = a === b ? 1 : 0;
-        else if (op === 33) r = a < b ? 1 : 0;
-        else r = (a >>> 0) < (b >>> 0) ? 1 : 0;
+        if (op === 19) r = a === -2147483648 && b === -1 ? a : Math.trunc(a / b) | 0;
+        else if (op === 20) r = b === -1 ? 0 : (a % b) | 0;
+        else if (op === 21) r = Math.floor((a >>> 0) / (b >>> 0)) | 0;
+        else r = ((a >>> 0) % (b >>> 0)) | 0;
         ps(r);
         break;
       }
