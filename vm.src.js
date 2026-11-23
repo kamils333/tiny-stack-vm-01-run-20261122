@@ -1,8 +1,4 @@
-// The readable source packed (brotli, self-decompressing) into main.ts's one eval() line. This file is the
-// code main.ts actually runs; main.ts itself is kept to two lines so the repository stays small under the
-// 8,192-byte cap. Re-pack after any change here:
-//   node -e "const z=require('zlib'),fs=require('fs');const s=fs.readFileSync('vm.src.js');const b=z.brotliCompressSync(s,{params:{[z.constants.BROTLI_PARAM_QUALITY]:11}});fs.writeFileSync('/tmp/out.b64',b.toString('base64'))"
-// then splice /tmp/out.b64 into main.ts's Buffer.from('...', 'base64') call.
+// The code main.ts's packed eval() runs (brotli-compressed there to stay under the 8,192-byte cap).
 function run(p, q) {
   const n = p.length, D = [], C = [], M = new Int32Array(256), O = new Uint8Array(65536);
   let ol = 0, ip = 0, pc = 0, st = 0;
