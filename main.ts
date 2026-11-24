@@ -6,7 +6,6 @@ const E=c=>({o:O.slice(0,ol),e:c&255});
 const ps=v=>D.push(v|0);
 const pp=()=>D.pop();
 const CK=(po,pu)=>D.length<po?2:D.length-po+pu>256?3:0;
-const MA=a=>a<0||a>=256;
 const BIN={16:(a,b)=>(a+b)|0,17:(a,b)=>(a-b)|0,18:(a,b)=>Math.imul(a,b),19:(a,b)=>a===-2147483648&&b===-1?a:Math.trunc(a/b)|0,20:(a,b)=>b===-1?0:(a%b)|0,21:(a,b)=>Math.floor((a>>>0)/(b>>>0))|0,22:(a,b)=>((a>>>0)%(b>>>0))|0,24:(a,b)=>a&b,25:(a,b)=>a|b,26:(a,b)=>a^b,28:(a,b)=>(a<<(b&31))|0,29:(a,b)=>a>>(b&31),30:(a,b)=>(a>>>(b&31))|0,32:(a,b)=>+(a===b),33:(a,b)=>+(a<b),34:(a,b)=>+((a>>>0)<(b>>>0))};
 const V=[0x7fff00ff,0x1f0007,0xf0003];
 for(;;){
@@ -15,8 +14,9 @@ if(pc<0||pc>=n)return E(9);
 const op=p[pc];
 if(!((V[op>>5]>>(op&31))&1))return E(5);
 const il=op===1?1:op===2?4:op>=48&&op<=51?2:0;
-if(pc+1+il>n)return E(9);
-const nx=pc+1+il;pc=nx;
+const nx=pc+1+il;
+if(nx>n)return E(9);
+pc=nx;
 let c;
 switch(op){
 case 0:return E(0);
@@ -47,8 +47,8 @@ break;
 }
 case 51:if(C.length>=64)return E(7);C.push(nx);pc=p[nx-2]|(p[nx-1]<<8);break;
 case 52:if(C.length===0)return E(8);pc=C.pop();break;
-case 64:{if((c=CK(1,1)))return E(c);const addr=pp();if(MA(addr))return E(6);ps(M[addr]);break;}
-case 65:{if((c=CK(2,0)))return E(c);const addr=pp(),v=pp();if(MA(addr))return E(6);M[addr]=v;break;}
+case 64:{if((c=CK(1,1)))return E(c);const addr=pp();if(addr<0||addr>=256)return E(6);ps(M[addr]);break;}
+case 65:{if((c=CK(2,0)))return E(c);const addr=pp(),v=pp();if(addr<0||addr>=256)return E(6);M[addr]=v;break;}
 case 80:{if((c=CK(1,0)))return E(c);const s=String(pp());if(ol+s.length>65536)return E(11);O.set(Buffer.from(s),ol);ol+=s.length;break;}
 case 81:{if((c=CK(1,0)))return E(c);const v=pp();if(ol+1>65536)return E(11);O[ol++]=v&255;break;}
 case 82:if((c=CK(0,1)))return E(c);ps(ip<q.length?q[ip++]:-1);break;
