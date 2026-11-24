@@ -1,4 +1,3 @@
-// run by main.ts's eval() at startup
 function run(p,q){
   const n=p.length,D=[],C=[],M=new Int32Array(256),O=new Uint8Array(65536);
   let ol=0,ip=0,pc=0,st=0;
@@ -8,11 +7,12 @@ function run(p,q){
   const CK=(po,pu)=>D.length<po?2:D.length-po+pu>256?3:0;
   const MA=a=>a<0||a>=256;
   const BIN={16:(a,b)=>(a+b)|0,17:(a,b)=>(a-b)|0,18:(a,b)=>Math.imul(a,b),24:(a,b)=>a&b,25:(a,b)=>a|b,26:(a,b)=>a^b,28:(a,b)=>(a<<(b&31))|0,29:(a,b)=>a>>(b&31),30:(a,b)=>(a>>>(b&31))|0,32:(a,b)=>+(a===b),33:(a,b)=>+(a<b),34:(a,b)=>+((a>>>0)<(b>>>0))};
+  const V=[0x7fff00ff,0x1f0007,0xf0003];
   for(;;){
     if(st++>=1000000)return E(10);
     if(pc<0||pc>=n)return E(9);
     const op=p[pc];
-    if(!((op>=0&&op<=7)||(op>=16&&op<=30)||(op>=32&&op<=34)||(op>=48&&op<=52)||(op>=64&&op<=65)||(op>=80&&op<=83)))return E(5);
+    if(!((V[op>>5]>>(op&31))&1))return E(5);
     const il=op===1?1:op===2?4:op>=48&&op<=51?2:0;
     if(pc+1+il>n)return E(9);
     const nx=pc+1+il;
